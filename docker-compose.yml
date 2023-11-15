@@ -1,0 +1,25 @@
+version: '3'
+
+services:
+  nginx:
+    build:
+      context: .
+      dockerfile: Dockerfile-nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    networks:
+      - mynetwork
+
+  apache:
+    build:
+      context: .
+      dockerfile: Dockerfile-apache
+    ports:
+      - "8000:80"
+    networks:
+      - mynetwork
+
+networks:
+  mynetwork:
+    driver: bridge
