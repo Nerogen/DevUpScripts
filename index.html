@@ -83,11 +83,14 @@
             <!-- Usage Information -->
             <h2>Links Usage</h2>
             <p>Here's how to use this Links:</p>
-            <ul>
-                <li>Click to hyperlink and retrieve next page: <a href="/nextpage" target="_blank">/nextpage</a></li>
+            <ul><li>Click to hyperlink and retrieve next page: <a href="/nextpage" target="_blank">/nextpage</a></li>
                 <li>Click to hyperlink and auto download music file: <a href="/music" target="_blank">/music</a></li>
-                <li>Click to hyperlink and retrieve info about php from apache server: <a href="/info" target="_blank">/info</a></li>
+                <li>Click to hyperlink and retrieve info about php from apache server: <a href="/info.php" target="_blank">/info.php</a></li>
                 <li>Click to hyperlink and retrieve info about other server: <a href="/secondserver" target="_blank">/secondserver</a></li>
+                <li>Click to hyperlink and retrieve red or blue page: <a href="/redblue" target="_blank">/redblue</a></li>
+                <li>Click to hyperlink and retrieve png image: <a href="/1.png" target="_blank">/1.png</a></li>
+                <li>Click to hyperlink and retrieve jpg image: <a href="/1.jpg" target="_blank">/1.jpg</a></li>
+
                 <!-- Add more instructions for your specific API endpoints -->
             </ul>
             <h2>Example of a request in curl</h2>
@@ -103,8 +106,11 @@
         <div class="code-container">
 <pre><code class="python" id="codeToCopy">curl http://localhost/nextpage \
 && curl http://localhost/music \
-&& curl http://localhost/info \
-&& curl http://localhost/secondserver</code></pre>
+&& curl http://localhost/info.php \
+&& curl http://localhost/secondserver \
+&& curl http://localhost/redblue \
+&& curl http://localhost/1.png \
+&& curl http://localhost/1.jpg</code></pre>
         </div>
     <script>
         hljs.highlightAll(); // Apply syntax highlighting to all code blocks
@@ -146,6 +152,15 @@ copyButton.addEventListener('click', function () {
             </div>
             <div class="code-container">
             <pre><code class="python">/nextserver get with revers proxy page from python.org</code></pre>
+            </div>
+            <div class="code-container">
+            <pre><code class="python">/redblue get blue or red page from nginx servers</code></pre>
+            </div>
+            <div class="code-container">
+            <pre><code class="python">/1.png get png image from nginx server</code></pre>
+            </div>
+            <div class="code-container">
+            <pre><code class="python">/1.jpg get jpg image from nginx server</code></pre>
             </div>
         </div>
     </main>
