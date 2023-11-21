@@ -1,1 +1,43 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Blue Display</title><style>body {background-color: blue;color: white; /* Set text color to white for better visibility on a blue background */font-family: Arial, sans-serif; /* Choose a font family */}</style></head><body><h1>Welcome to the Blue Display</h1></body></html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CPU Usage Monitor</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin: 50px;
+    }
+    #cpuUsage {
+      font-size: 24px;
+    }
+  </style>
+</head>
+<body>
+  <h1>CPU Usage Monitor</h1>
+  <p id="cpuUsage">Loading...</p>
+
+  <script>
+    function updateCPUUsage() {
+      // Fetch CPU usage from the server-side script
+      fetch('/cpu-usage.sh')
+        .then(response => response.text())
+        .then(data => {
+          // Update the CPU usage element
+          document.getElementById('cpuUsage').innerText = 'CPU Usage: ' + data.trim();
+        })
+        .catch(error => {
+          console.error('Error fetching CPU usage:', error);
+        });
+    }
+
+    // Update CPU usage every 5 seconds
+    setInterval(updateCPUUsage, 5000);
+
+    // Initial update
+    updateCPUUsage();
+  </script>
+</body>
+</html>
