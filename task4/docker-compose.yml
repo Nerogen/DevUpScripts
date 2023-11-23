@@ -3,8 +3,8 @@ version: '3'
 services:
   nginx:
     build:
-      context: .
-      dockerfile: Dockerfile-nginx
+      context: ..
+      dockerfile: ../Dockerfile-nginx
     ports:
       - "80:80"
     networks:
@@ -12,8 +12,8 @@ services:
 
   apache:
     build:
-      context: .
-      dockerfile: Dockerfile-apache
+      context: ..
+      dockerfile: ../Dockerfile-apache
     ports:
       - "8080:80"
     networks:

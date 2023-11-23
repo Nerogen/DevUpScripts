@@ -3,15 +3,13 @@
 array=("./file1.txt" "./file2.txt" "./file3.txt" "./file4.txt")
 log_file="/var/log/nginx/access.log"
 
-# ps aux | grep script.sh
-# kill -KILL <PID>
-
 max_size_kb=300
 
 process() {
 while true; do
 
     cat $log_file >> ${array[0]}
+    echo "" > $log_file;
     echo "Logs nginx to first file"
     current_size_kb=$(du -k ${array[0]} | cut -f1)
     if [ "$current_size_kb" -gt "$max_size_kb" ]; then
