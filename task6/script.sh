@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-array=("./file1.txt" "./file2.txt" "./file3.txt" "./file4.txt")
+array=("/home/ubuntu/file1.txt" "/home/ubuntu/file2.txt" "/home/ubuntu/file3.txt" "/home/ubuntu/file4.txt")
 log_file="/var/log/nginx/access.log"
 
 max_size_kb=300

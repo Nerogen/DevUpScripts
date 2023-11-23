@@ -30,7 +30,7 @@ html_content="<!DOCTYPE html>
         }
     </style>
     <script>
-        // Reload the page every 0.5 seconds
+        // Reload the page every 0.1 seconds
         setTimeout(function() {
             location.reload();
         }, 500);
@@ -50,7 +50,7 @@ echo "$html_content" > /usr/share/nginx/html/index.html
 process() {
 while true; do
     cpu
-    sleep 0.5
+    sleep 0.1
 done
 }
 process
