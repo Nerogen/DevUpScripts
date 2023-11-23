@@ -3,8 +3,7 @@
 cpu () {
 # Get CPU usage using the top command
 
-cpu_usage=$(top -bn1 | awk '{print 100 - $1"%"}'
-)
+cpu_usage=$(top -bn1 | grep 'Cpu(s)' |  awk '{if (100 - $8 == 100) {print "0%"} else {print 100 - $8"%"}}')
 # HTML content with CPU usage
 html_content="<!DOCTYPE html>
 <html lang='en'>
@@ -31,10 +30,10 @@ html_content="<!DOCTYPE html>
         }
     </style>
     <script>
-        // Reload the page every 2.5 seconds
+        // Reload the page every 0.5 seconds
         setTimeout(function() {
             location.reload();
-        }, 2500);
+        }, 500);
     </script>
 </head>
 <body>
@@ -51,7 +50,7 @@ echo "$html_content" > /usr/share/nginx/html/index.html
 process() {
 while true; do
     cpu
-    sleep 1
+    sleep 0.5
 done
 }
 process
