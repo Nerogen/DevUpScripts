@@ -1,0 +1,12 @@
+[Unit]
+Description=NGINX Log Monitor
+After=network.target
+
+[Service]
+ExecStart=/home/ubuntu/script.sh
+Restart=always
+User=root
+Group=root
+
+[Install]
+WantedBy=multi-user.target
