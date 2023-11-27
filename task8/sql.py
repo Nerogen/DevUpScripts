@@ -1,15 +1,7 @@
-create_table = """
-CREATE TABLE credit_cards_numbers( id PRIMARY KEY, name varchar(50) NOT NULL, speciality varchar(50) NOT NULL);
 """
+CREATE DATABASE IF NOT EXIST jundb;
 
-insert_to_table1 = """
-INSERT INTO credit_cards_numbers (name, speciality) VALUES ('Oleg', 'somelue');
-"""
+CREATE TABLE credit_cards_numbers( record_id INT NOT NULL PRIMARY KEY, name varchar(50) NOT NULL, speciality varchar(50) NOT NULL);
 
-insert_to_table2 = """
-INSERT INTO credit_cards_numbers (name, speciality) VALUES ('Vasya', 'python');
-"""
-
-insert_to_table3 = """
-INSERT INTO credit_cards_numbers (name, speciality) VALUES ('Lena', 'ux');
+INSERT INTO credit_cards_numbers (record_id, name, speciality) VALUES (1, 'Oleg', 'somelue'), (2, 'Vasya', 'python'), (3, 'Lena', 'ux');
 """
