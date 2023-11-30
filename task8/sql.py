@@ -27,3 +27,10 @@ SELECT * FROM credit_cards_numbers;
 """
 DROP DATABASE jundb;
 """
+
+"\list" or "\l"
+"\c" or "\connect"
+"\dt"
+
+"show databases;"
+"use 'db_name'"
