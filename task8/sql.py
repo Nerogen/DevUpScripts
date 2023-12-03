@@ -34,3 +34,23 @@ DROP DATABASE jundb;
 
 "show databases;"
 "use 'db_name'"
+
+
+"""
+CREATE USER dmosk WITH PASSWORD 'myPassword';
+"""
+
+# role user
+""" 
+createuser -P dmosk
+"""
+
+# role for using database
+"""
+GRANT ALL PRIVILEGES ON DATABASE "database1" to dmosk;
+"""
+
+# role for all tables
+"""
+GRANT pg_read_all_data TO dmosk;
+"""
