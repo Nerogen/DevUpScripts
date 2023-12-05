@@ -6,16 +6,17 @@ import time
 from creds import AWS_SERVER_PUBLIC_KEY, AWS_SERVER_SECRET_KEY
 
 
-def a_few_time_loop(ssh_client, ip, user, key):
+def a_few_time_loop(ssh_client, ip, user, key, description):
     time_outs = 0
     # Ожидание доступности SSH
     while time_outs < 3:
+        print("Time_out: ", time_outs)
         try:
             ssh_client.connect(ip, username=user, pkey=key)
             break
-        except paramiko.SSHException as e:
+        except Exception as e:
             time_outs += 1
-            print(e)
+            print(description, e, sep="\n")
             time.sleep(5)
 
     else:
@@ -25,28 +26,57 @@ def a_few_time_loop(ssh_client, ip, user, key):
 
 
 def cloud_watch(instance_id):
-    # Получение метрик (пример с использованием CloudWatch)
+    # Specify the metric names and dimensions
+    metric_names = ['NetworkIn', 'NetworkOut', 'CPUUtilization', 'MetadataNoToken']
+    dimensions = [{'Name': 'InstanceId', 'Value': instance_id}]
+
     cloudwatch = boto3.client('cloudwatch',
                               aws_access_key_id=AWS_SERVER_PUBLIC_KEY,
                               aws_secret_access_key=AWS_SERVER_SECRET_KEY,
                               region_name='us-east-1'
-    )
+                              )
 
-    # Получение метрики CPUUtilization за последний час
-    start_time = (datetime.datetime.utcnow() - datetime.timedelta(minutes=1)).strftime('%Y-%m-%dT%H:%M:%SZ')
-    end_time = datetime.datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%SZ')
+    current_time_utc = datetime.datetime.utcnow()
 
-    response = cloudwatch.get_metric_statistics(
-        Namespace='AWS/EC2',
-        MetricName='CPUUtilization',
-        Dimensions=[{'Name': 'InstanceId', 'Value': instance_id}],
+    # Форматируем время в строку
+    start_time = (current_time_utc - datetime.timedelta(minutes=10)).strftime('%Y-%m-%dT%H:%M:%SZ')
+
+    time.sleep(180)
+    # Получаем текущее время UTC
+    current_time_utc = datetime.datetime.utcnow()
+
+    end_time = current_time_utc.strftime('%Y-%m-%dT%H:%M:%SZ')
+
+    # Get metric data
+    response = cloudwatch.get_metric_data(
+        MetricDataQueries=[
+            {
+                'Id': f'metric_{metric_name}',
+                'MetricStat': {
+                    'Metric': {
+                        'Namespace': 'AWS/EC2',
+                        'MetricName': metric_name,
+                        'Dimensions': dimensions
+                    },
+                    'Period': 360,
+                    'Stat': 'Average'
+                },
+                'ReturnData': True
+            }
+            for metric_name in metric_names
+        ],
         StartTime=start_time,
-        EndTime=end_time,
-        Period=300,
-        Statistics=['Average']
+        EndTime=end_time
     )
 
     print(response)
+
+    # Print the metric data
+    for result in response['MetricDataResults']:
+        print(f"MetricName: {result['Id']}")
+        for timestamp, value in zip(result['Timestamps'], result['Values']):
+            print(f"Timestamp: {timestamp}, Value: {value}")
+        print()
 
 
 def main():
@@ -105,33 +135,30 @@ def main():
     print(f"Instance Type: {instance_type}")
     print(f"OS Type: {os_type}")
 
+    # Подключение к инстансу по SSH
+    key = paramiko.RSAKey(filename='Task2.pem')  # Замените на путь к вашему закрытому ключу
+    key_old = paramiko.RSAKey(filename='Task4.pem')  # Замените на путь к вашему закрытому ключу
+    public_key_openssh = "ssh-rsa " + key.get_base64() + " Task2"
+
+    ssh_client = paramiko.SSHClient()
+    ssh_client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+
+    print(a_few_time_loop(ssh_client, public_ip, 'ubuntu', key_old, 'first'))
+
+    # Переписывание ключа на инстансе
+    command = f'echo "{public_key_openssh}" > ~/.ssh/authorized_keys'
+
     try:
-        # Подключение к инстансу по SSH
-        key = paramiko.RSAKey(filename='Task2.pem')  # Замените на путь к вашему закрытому ключу
-        key_old = paramiko.RSAKey(filename='Task4.pem')  # Замените на путь к вашему закрытому ключу
-        public_key_openssh = "ssh-rsa " + key.get_base64() + " Task2"
-
-        ssh_client = paramiko.SSHClient()
-        ssh_client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-
-        a_few_time_loop(ssh_client, public_ip, 'ubuntu', key_old)
-
-        # Переписывание ключа на инстансе
-        command = f'echo "{public_key_openssh}" > ~/.ssh/authorized_keys'
         ssh_client.exec_command(command)
-
         # Закрытие SSH-соединения
         ssh_client.close()
-
-        a_few_time_loop(ssh_client, public_ip, 'ubuntu', key)
-        print("SSH connection established with the new key.")
-
     except Exception as ex:
         print(ex)
 
-    finally:
-        # Удаление инстанса
-        response[0].terminate()
+    print(a_few_time_loop(ssh_client, public_ip, 'ubuntu', key, 'second'))
+
+    # Удаление инстанса
+    response[0].terminate()
 
 
 if __name__ == '__main__':

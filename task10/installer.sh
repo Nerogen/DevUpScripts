@@ -18,5 +18,3 @@ else
     exit 1
 fi
 
-# Настройка AWS CLI профиля
-aws configure --profile your_profile_name
