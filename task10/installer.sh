@@ -23,8 +23,7 @@ elif command -v brew &> /dev/null; then
     aws --version
 # Установка AWS CLI на Windows (предполагается использование WSL)
 elif command -v wsl &> /dev/null; then
-    msiexec.exe /i https://awscli.amazonaws.com/AWSCLIV2.msi
-    aws --version
+    ./ts.bat
 else
     echo "Unsupported OS"
     exit 1
