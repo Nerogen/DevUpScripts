@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-echo "start"
+echo 'start'
 
 # Установка AWS CLI на Linux (Redhat, Ubuntu)
 if command -v yum &> /dev/null; then
@@ -20,6 +20,7 @@ elif command -v apt-get &> /dev/null; then
 # Установка AWS CLI на MacOS
 elif command -v brew &> /dev/null; then
     brew install aws-cli
+    aws --version
 # Установка AWS CLI на Windows (предполагается использование WSL)
 elif command -v wsl &> /dev/null; then
     msiexec.exe /i https://awscli.amazonaws.com/AWSCLIV2.msi
@@ -28,5 +29,3 @@ else
     echo "Unsupported OS"
     exit 1
 fi
-
-read
