@@ -8,7 +8,7 @@ from creds import AWS_SERVER_PUBLIC_KEY, AWS_SERVER_SECRET_KEY
 
 def a_few_time_loop(ssh_client, ip, user, key, description):
     time_outs = 0
-    # Ожидание доступности SSH
+    # wait for access by SSH
     while time_outs < 3:
         print("Time_out: ", time_outs)
         try:
@@ -40,11 +40,11 @@ def cloud_watch(instance_id):
 
     current_time_utc = datetime.datetime.utcnow()
 
-    # Форматируем время в строку
+    # formation time to string
     start_time = (current_time_utc - datetime.timedelta(minutes=10)).strftime('%Y-%m-%dT%H:%M:%SZ')
 
     time.sleep(300)
-    # Получаем текущее время UTC
+    # get time in utc
     current_time_utc = datetime.datetime.utcnow()
 
     end_time = current_time_utc.strftime('%Y-%m-%dT%H:%M:%SZ')
@@ -83,7 +83,6 @@ def cloud_watch(instance_id):
 
 
 def main():
-    # Замените значения на свои
     region = 'us-east-1'
     key_pair_name = 'Task4'
 
@@ -118,10 +117,10 @@ def main():
         ],
     )
 
-    # Ожидание, пока инстанс запустится
+    # Wait starting instance
     response[0].wait_until_running()
 
-    # Получение информации об инстансе
+    # Get info about instance
     instance = ec2.Instance(response[0].id)
     instance_id = instance.id
     public_ip = instance.public_ip_address
@@ -129,7 +128,7 @@ def main():
     instance_type = instance.instance_type
     os_type = instance.image.description
 
-    # Печать полученной информации
+    # Print data
     print("EC2 summary: ", "*" * 100)
     print(f"Instance ID: {instance_id}")
     print(f"Public IP: {public_ip}")
@@ -139,9 +138,9 @@ def main():
 
     cloud_watch(instance_id)
 
-    # Подключение к инстансу по SSH
-    key = paramiko.RSAKey(filename='Task2.pem')  # Замените на путь к вашему закрытому ключу
-    key_old = paramiko.RSAKey(filename='Task4.pem')  # Замените на путь к вашему закрытому ключу
+    # Connect to instance by SSH
+    key = paramiko.RSAKey(filename='Task2.pem')
+    key_old = paramiko.RSAKey(filename='Task4.pem')
     public_key_openssh = "ssh-rsa " + key.get_base64() + " Task2"
 
     ssh_client = paramiko.SSHClient()
@@ -151,19 +150,19 @@ def main():
 
     print(a_few_time_loop(ssh_client, public_ip, 'ubuntu', key_old, 'first'))
 
-    # Переписывание ключа на инстансе
+    # Rewrite key of instance
     command = f'echo "{public_key_openssh}" > ~/.ssh/authorized_keys'
 
     try:
         ssh_client.exec_command(command)
-        # Закрытие SSH-соединения
+        # close connection
         ssh_client.close()
     except Exception as ex:
         print(ex)
 
     print(a_few_time_loop(ssh_client, public_ip, 'ubuntu', key, 'second'))
 
-    # Удаление инстанса
+    # terminate instance
     response[0].terminate()
 
 
