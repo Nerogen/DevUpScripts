@@ -27,7 +27,9 @@ def a_few_time_loop(ssh_client, ip, user, key, description):
 
 def cloud_watch(instance_id):
     # Specify the metric names and dimensions
-    metric_names = ['NetworkIn', 'NetworkOut', 'CPUUtilization', 'MetadataNoToken']
+    metric_names = ['StatusCheckFailed', 'DiskWriteOps', 'DiskReadOps', 'DiskWriteBytes',
+                    'DiskReadBytes', 'NetworkIn', 'NetworkOut', 'CPUUtilization', 'MetadataNoToken',
+                    'CPUCreditUsage']
     dimensions = [{'Name': 'InstanceId', 'Value': instance_id}]
 
     cloudwatch = boto3.client('cloudwatch',
@@ -41,11 +43,13 @@ def cloud_watch(instance_id):
     # Форматируем время в строку
     start_time = (current_time_utc - datetime.timedelta(minutes=10)).strftime('%Y-%m-%dT%H:%M:%SZ')
 
-    time.sleep(180)
+    time.sleep(300)
     # Получаем текущее время UTC
     current_time_utc = datetime.datetime.utcnow()
 
     end_time = current_time_utc.strftime('%Y-%m-%dT%H:%M:%SZ')
+
+    print("Times: ", start_time, end_time)
 
     # Get metric data
     response = cloudwatch.get_metric_data(
@@ -69,9 +73,8 @@ def cloud_watch(instance_id):
         EndTime=end_time
     )
 
-    print(response)
-
     # Print the metric data
+    print("CloudWatch summary: ", "*" * 100)
     for result in response['MetricDataResults']:
         print(f"MetricName: {result['Id']}")
         for timestamp, value in zip(result['Timestamps'], result['Values']):
@@ -126,14 +129,15 @@ def main():
     instance_type = instance.instance_type
     os_type = instance.image.description
 
-    cloud_watch(instance_id)
-
     # Печать полученной информации
+    print("EC2 summary: ", "*" * 100)
     print(f"Instance ID: {instance_id}")
     print(f"Public IP: {public_ip}")
     print(f"Private IP: {private_ip}")
     print(f"Instance Type: {instance_type}")
     print(f"OS Type: {os_type}")
+
+    cloud_watch(instance_id)
 
     # Подключение к инстансу по SSH
     key = paramiko.RSAKey(filename='Task2.pem')  # Замените на путь к вашему закрытому ключу
@@ -142,6 +146,8 @@ def main():
 
     ssh_client = paramiko.SSHClient()
     ssh_client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+
+    print("Keys manipulation: ", "*" * 100)
 
     print(a_few_time_loop(ssh_client, public_ip, 'ubuntu', key_old, 'first'))
 
