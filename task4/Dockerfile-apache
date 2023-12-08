@@ -9,5 +9,5 @@ RUN echo "<?php phpinfo(); ?>" > /var/www/html/index.php
 # COPY ports.conf /etc/apache2/ports.conf
 
 # Change default Apache start page
-# COPY custom-index.html /var/www/html/index.html
+# COPY custom-index_nginx.html /var/www/html/index_nginx.html
 
