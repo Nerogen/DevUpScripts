@@ -1,11 +1,184 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
     <meta charset="UTF-8">
-    <title>My site</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tuning Atelier</title>
+    <!-- Подключение Bootstrap или других библиотек стилей для оформления -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.7.2/styles/atom-one-dark.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.7.2/highlight.min.js">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.7.2/highlight.min.js"></script>
+    <style>
+        body {
+            background-color: #1A1919;
+            color: #fff;
+        }
 
-    </script></head><body><header><nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <a class="navbar-brand" href="">Welcome to my site!</a></nav></header></body></html>
+        .container {
+            background-color: #2A2A2A;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .json-block {
+            background-color: #000;
+            display: inline-block;
+            margin-right: 20px;
+            padding: 15px;
+            border-radius: 5px;
+        }
+
+        .red-text {
+            color: #F64A60;
+        }
+
+        .code-container {
+            background-color: #000000;
+            border-radius: 0.375rem;
+            margin-bottom: 1rem;
+            color: #cfcfcf;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            background-color: #3c3c3c; /* Сероватая шапка */
+            padding: 15px 1rem;
+            font-size: 0.75rem;
+            border-top-left-radius: 0.375rem;
+            border-top-right-radius: 0.375rem;
+        }
+
+        .navbar-brand {
+            color: #fff;
+            font-size: 1.5rem;
+            font-weight: bold; /* Жирный текст */
+        }
+
+        .navbar a {
+            color: #fff;
+            text-decoration: none;
+            margin: 0 15px;
+            font-size: 18px;
+            font-weight: bold; /* Жирный текст */
+        }
+
+        .navbar a:hover {
+            text-color: #fff;
+            color: #fff; /* Изменение цвета при наведении */
+            background-color: #333; /* Цвет фона при наведении */
+            border-color: #fff; /* Цвет обводки при наведении */
+        }
+
+        .footer {
+            background-color: #141215;
+            color: #fff;
+            padding: 30px 0;
+            text-align: center;
+        }
+
+        .footer p {
+            margin: 50px;
+        }
+
+        .best-projects {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .project-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+        }
+
+        .project {
+            width: 30%;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .project img {
+            width: 100%;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+
+        .bg {
+            background-color: #141215;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Шапка с меню -->
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-light bg">
+            <a href="">Welcome to DriveCraft Studio!</a>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav ml-auto navbar-brand">
+                    <li class="nav-item">
+                        <a class="btn" href="#about">О нас</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="btn" href="#projects">Проекты</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="bnt" href="#prices">Цены</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="btn" href="#catalog">Каталог</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <!-- Остальной контент страницы -->
+
+        <!-- Блок "Наши лучшие проекты" -->
+        <div class="best-projects">
+            <h2>OUR BEST PROJECTS</h2>
+            <div class="project-container">
+                <!-- Проект 1 -->
+                <div class="project">
+                    <img src="1.jpg" alt="Проект 1">
+                    <h3>A WALK IN THE PARK WITH MY GAL: MIKE BURROUGHS’S 1971 BMW E9</h3>
+                    <p>There’s something special about classic cars. Their defined lines and established curves,
+                        strangely inviting, even to those who don’t know the difference between wheel and...</p>
+                </div>
+
+                <!-- Проект 2 -->
+                <div class="project">
+                    <img src="2.jpg" alt="Проект 2">
+                    <h3>MAGNUS WALKER’S PORSCHE 78SCHR</h3>
+                    <p>It’s easy to feel removed when you skim the pages of the latest car magazine,
+                        scroll through the most recent blog posts, or watch as...</p>
+                </div>
+
+                <!-- Проект 3 -->
+                <div class="project">
+                    <img src="3.jpg" alt="Проект 3">
+                    <h3>THE BAVARIAN OUTLAW – GEORGE SCHUSTER’S S14-POWERED BMW 2002</h3>
+                    <p>In 1973, the world was blessed with Europe’s first turbocharged production car:
+                        the BMW 2002 Turbo. With 170 horsepower and
+                        177 pound-feet of torque, it...</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ... -->
+    </main>
+
+    <!-- Блок "All rights reserved" -->
+    <footer class="footer">
+            <p>&copy; 2023 Tuning Atelier. All rights reserved.</p>
+    </footer>
+
+</body>
+
+</html>
