@@ -1,5 +1,6 @@
 provider "aws" {
-
+  access_key = "" # delete for git
+  secret_key = ""
   region     = "us-east-1"
 }
 

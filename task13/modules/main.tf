@@ -192,7 +192,7 @@ resource "aws_security_group" "private_host_security_group" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
-  # Outward Network Traffic for the WordPress
+  # Outward Network Traffic
   egress {
     description = "output from webserver"
     from_port   = 0
@@ -252,7 +252,7 @@ resource "aws_instance" "Bastion-Host" {
   }
 }
 
-# Creating an AWS instance for the Bastion Host, It should be launched in the public Subnet!
+# Creating an AWS Private instance, It should be launched in the private Subnet!
 resource "aws_instance" "Private-Host" {
 
   ami           = "ami-0fc5d935ebf8bc3bc"
@@ -269,7 +269,7 @@ resource "aws_instance" "Private-Host" {
   }
 }
 
-# Creating security group for Bastion Host/Jump Box
+# Creating security group for RDS
 resource "aws_security_group" "db_security_group" {
 
   depends_on = [
@@ -282,7 +282,7 @@ resource "aws_security_group" "db_security_group" {
   name        = "Postgres"
   vpc_id      = aws_vpc.main.id
 
-  # Created an inbound rule for Bastion Host SSH
+  # Created an inbound rule for RDS
   ingress {
     description = "Postgres"
     from_port   = 5432
@@ -311,30 +311,15 @@ resource "aws_db_instance" "my_rds" {
   engine                 = "postgres"
   engine_version         = "15.4"
   instance_class         = "db.t3.micro"
-
+  username               = "postgres"
+  password               = ""
   availability_zone      = "us-east-1a"
   skip_final_snapshot    = true
   publicly_accessible    = true
   db_subnet_group_name   = aws_db_subnet_group.rds_subnet.id
   vpc_security_group_ids = [aws_security_group.db_security_group.id]
-  tags =  {
-  Name = "rds_public_access"
+  tags                   = {
+    Name = "rds_public_access"
+  }
 }
-}
-
-#resource "aws_db_instance" "dsdj-postgres-db-instance" {
-#  allocated_storage    = 20
-#  multi_az             = false
-#  db_subnet_group_name = aws_db_subnet_group.rds_subnet.id
-#  engine               = "postgres"
-#  engine_version       = "13.8"
-#  identifier           = "dsdj-postgres-db"
-#  instance_class       = "db.t2.micro"
-#  password             = "mypostgrespassword"
-#  skip_final_snapshot  = true
-#  storage_encrypted    = false
-#  publicly_accessible  = true
-#  username             = "postgres"
-#  apply_immediately    = true
-#}
 
