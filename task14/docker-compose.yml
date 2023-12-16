@@ -1,0 +1,18 @@
+version: "4"
+
+services:
+  nginx:
+    build:
+      dockerfile: Dockerfile_nginx
+    container_name: nginx
+    ports:
+      - "80:80"
+
+
+  apatche:
+    build:
+      dockerfile: Dockerfile_apache
+    container_name: apache
+    ports:
+      - "8080:80"
+

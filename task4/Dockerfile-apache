@@ -4,10 +4,10 @@ FROM php:7.4-apache
 RUN echo "<?php phpinfo(); ?>" > /var/www/html/index.php
 
 # Copy custom Apache configuration
-#COPY 000-default.conf /etc/apache2/sites-available/000-default.conf
+#COPY 000-default.conf.conf /etc/apache2/sites-available/000-default.conf.conf
 #
 # COPY ports.conf /etc/apache2/ports.conf
 
-# Change default Apache start page
+# Change default.conf Apache start page
 # COPY custom-index_nginx.html /var/www/html/index_nginx.html
 

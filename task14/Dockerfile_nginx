@@ -1,0 +1,11 @@
+FROM nginx
+
+COPY default.conf /etc/nginx/conf.d/default.conf
+COPY nginx.conf /etc/nginx/nginx.conf
+COPY index.html /usr/share/nginx/html/index.html
+
+RUN mkdir "/var/www" "/var/www/html" "/var/www/images" "/var/www/html/music"
+COPY images/1.jpg /var/www/images
+COPY images/1.png /var/www/images
+
+COPY music/song.mp3 /var/www/html/music
