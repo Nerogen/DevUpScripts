@@ -1,18 +1,18 @@
 version: "4"
 
 services:
-  nginx:
+  nginx_container:
+    container_name: nginx
     build:
       dockerfile: Dockerfile_nginx
-    container_name: nginx
     ports:
       - "80:80"
 
 
-  apatche:
+  apache_container:
+    container_name: apache
     build:
       dockerfile: Dockerfile_apache
-    container_name: apache
     ports:
       - "8080:80"
 
