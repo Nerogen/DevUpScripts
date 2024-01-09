@@ -12,7 +12,7 @@ services:
   apache_container:
     container_name: apache
     build:
-      dockerfile: Dockerfile_apache
+      dockerfile: ../task15/Dockerfile_apache
     ports:
       - "8080:80"
 
