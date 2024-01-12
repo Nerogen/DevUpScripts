@@ -1,0 +1,71 @@
+---
+- name: Install Docker and run container
+  hosts:
+    - ubuntu_group
+  become: true
+
+  tasks:
+    - name: Identify the OS family
+      debug:
+        var: ansible_os_family
+
+    - name: Install prerequisites for Docker on Ubuntu
+      ansible.builtin.package:
+        name:
+          - apt-transport-https
+          - ca-certificates
+          - curl
+          - gnupg-agent
+          - software-properties-common
+
+    - name: Add Docker GPG key
+      ansible.builtin.apt_key:
+        url: https://download.docker.com/linux/ubuntu/gpg
+        state: present
+
+    - name: Add Docker APT repository
+      ansible.builtin.apt_repository:
+        repo: deb [arch=amd64] https://download.docker.com/linux/ubuntu focal stable
+        state: present
+
+    - name: Add Docker APT repository
+      ansible.builtin.apt_repository:
+        repo: deb [arch=amd64] https://download.docker.com/linux/ubuntu focal stable
+        state: present
+
+    - name: Install Docker on Ubuntu
+      ansible.builtin.package:
+        name: docker-ce
+        state: present
+
+    - name: Start Docker service
+      ansible.builtin.service:
+        name: docker
+        state: started
+        enabled: yes
+
+    - name: Install pip3
+      ansible.builtin.package:
+        name: python3-pip
+        state: present
+      become: true
+
+    - name: Install Docker Python library
+      ansible.builtin.pip:
+        name: docker
+        state: present
+      become: true
+
+    - name: Pull Docker image
+      docker_image:
+        name: nginx:latest
+        source: pull
+      become: true
+
+    - name: Run Docker container
+      docker_container:
+        name: my_nginx
+        image: nginx:latest
+        state: started
+        ports:
+          - "80:80"

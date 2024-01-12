@@ -1,0 +1,98 @@
+---
+- name: Install Docker and run container
+  hosts:
+    - ubuntu_group
+    - amazon_group
+  become: true
+
+  tasks:
+    - name: Identify the OS family
+      debug:
+        var: ansible_os_family
+
+    - name: Install prerequisites for Docker on Ubuntu
+      apt:
+        pkg:
+          - apt-transport-https
+          - ca-certificates
+          - curl
+          - software-properties-common
+          - python3-pip
+          - virtualenv
+          - python3-setuptools
+        state: latest
+        update_cache: true
+      when: ansible_os_family == "Debian"
+
+    - name: Add Docker GPG key Ubuntu
+      apt_key:
+        url: https://download.docker.com/linux/ubuntu/gpg
+        state: present
+      when: ansible_os_family == "Debian"
+
+    - name: Add Docker GPG key Amazon
+      rpm_key:
+        key: "https://download.docker.com/linux/rhel/gpg"
+        state: present
+      when: ansible_os_family == "RedHat"
+
+    - name: Add Docker APT repository Ubuntu
+      apt_repository:
+        repo: deb [arch=amd64] https://download.docker.com/linux/ubuntu focal stable
+        state: present
+      when: ansible_os_family == "Debian"
+
+    - name: Add Docker YUM repository Amazon
+      yum_repository:
+        name: docker
+        description: docker repository
+        baseurl: "https://download.docker.com/linux/rhel/$releasever/$basearch/stable"
+        gpgcheck: true
+        gpgkey: "https://download.docker.com/linux/rhel/gpg"
+        state: present
+      when: ansible_os_family == "RedHat"
+
+    - name: Install Docker on Ubuntu
+      apt:
+        name: docker-ce
+        state: latest
+        update_cache: true
+      when: ansible_os_family == "Debian"
+
+    - name: Install Docker on Amazon
+      dnf:
+        name:
+          - docker
+        state: latest
+        update_cache: true
+      when: ansible_os_family == "RedHat"
+
+    - name: Remove python3-requests
+      dnf:
+        name: python3-requests
+        state: absent
+      when: ansible_os_family == "RedHat"
+
+    - name: Install Docker Module for Python
+      pip:
+        name: docker
+
+    - name: Start Docker service
+      service:
+        name: docker
+        state: started
+        enabled: yes
+
+    - name: Pull Docker image
+      docker_image:
+        name: nginx:latest
+        source: pull
+      become: true
+
+    - name: Run Docker container
+      docker_container:
+        name: my_nginx
+        image: nginx:latest
+        state: started
+        ports:
+          - "80:80"

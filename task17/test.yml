@@ -1,0 +1,36 @@
+---
+- name: Install Docker and run container
+  hosts:
+    - ubuntu_group
+  become: true
+
+  tasks:
+    - name: Get script for install docker
+      command: curl -fsSL https://get.docker.com -o get-docker.sh
+      register: curl_result
+
+    - name: Out of curl command
+      debug:
+        var: curl_result
+
+    - name: Start script for docker installation
+      command: "sh get-docker.sh"
+
+    - name: Install Docker Module for Python
+      pip:
+        name: docker
+
+    - name: Pull Docker image
+      docker_image:
+        name: nginx:latest
+        source: pull
+      become: true
+
+    - name: Run Docker container
+      docker_container:
+        name: my_nginx
+        image: nginx:latest
+        state: started
+        ports:
+          - "80:80"
+
