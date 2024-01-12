@@ -30,10 +30,16 @@
           repo: deb [arch=amd64] https://download.docker.com/linux/ubuntu focal stable
           state: present
 
-
       - name: Install Docker on Ubuntu
         apt:
-          name: docker-ce
+          name:
+            - docker-ce
+            - docker-ce-cli
+            - containerd.io
+            - docker-buildx-plugin
+            - docker-compose-plugin
+            - docker-compose
+            - git
           state: latest
           update_cache: true
 
@@ -65,6 +71,13 @@
         dnf:
           name: python3-requests
           state: absent
+
+      - name: Install Docker Compose from GitHub
+        shell:
+          cmd: "curl -L https://github.com/docker/compose/releases/latest/download/docker-compose-Linux-x86_64 -o /usr/local/bin/docker-compose && chmod +x /usr/local/bin/docker-compose"
+        args:
+          executable: /bin/bash
+
       when: ansible_os_family == "RedHat"
 
     - name: Install Docker Module for Python
@@ -77,16 +90,12 @@
         state: started
         enabled: yes
 
-    - name: Pull Docker image
-      docker_image:
-        name: nginx:latest
-        source: pull
-      become: true
+    - name: Clone the Git repository
+      git:
+        repo: https://github.com/Nerogen/ansible_setup.git
+        dest: ./dg/
+        version: master  # Specify the branch or tag you want to clone (optional)
 
-    - name: Run Docker container
-      docker_container:
-        name: my_nginx
-        image: nginx:latest
-        state: started
-        ports:
-          - "80:80"
+    - name: Run docker-compose up
+      ansible.builtin.shell:
+        cmd: cd dg/ && docker-compose up -d
