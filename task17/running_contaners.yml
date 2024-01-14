@@ -1,0 +1,9 @@
+- name: Clone the Git repository
+  git:
+    repo: https://github.com/Nerogen/ansible_setup.git
+    dest: ./dg/
+    version: master  # Specify the branch or tag you want to clone (optional)
+
+- name: Run docker-compose up
+  ansible.builtin.shell:
+    cmd: cd dg/ && docker-compose up -d

@@ -1,0 +1,10 @@
+---
+- name: Install Docker and run container
+  hosts:
+    - ubuntu_group
+    - amazon_group
+  become: true
+
+  roles:
+    - instalation_of_docker
+    - build_and_run_containers
