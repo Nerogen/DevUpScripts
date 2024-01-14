@@ -1,0 +1,20 @@
+version: "3"
+
+services:
+  nginx_container:
+    container_name: nginx
+    build:
+      context: .
+      dockerfile: Dockerfile_nginx
+    ports:
+      - "80:80"
+
+
+  apache_container:
+    container_name: apache
+    build:
+      context: .
+      dockerfile: Dockerfile_apache
+    ports:
+      - "8080:80"
+

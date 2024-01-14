@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Nginx service</title>
+    <!-- Include Bootstrap or other CSS libraries for styling -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.7.2/styles/atom-one-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.7.2/highlight.min.js"></script>
+</head>
+<style>
+    body {
+    background-color: #1A1919; /* Set the background color to dark */
+    color: #fff; /* Set text color to white */
+}
+.container {
+    background-color: #2A2A2A; /* Set container background color to slightly lighter */
+    border-radius: 10px;
+    padding: 20px;
+    margin-top: 20px;
+}
+.json-block {
+    background-color: #000; /* Set JSON block background color to black */
+    display: inline-block;
+    margin-right: 20px;
+    padding: 15px;
+    border-radius: 5px;
+}
+.red-text {
+    color: #F64A60; /* Define the text color as red */
+}
+
+.code-container {
+    background-color: #000000; /* Dark background color */
+    border-radius: 0.375rem; /* Rounded corners */
+    margin-bottom: 1rem;
+    color: #cfcfcf; /* Text color */
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    background-color: #333; /* Header background color */
+    padding: 0.5rem 1rem;
+    font-size: 0.75rem; /* Header font size */
+    border-top-left-radius: 0.375rem;
+    border-top-right-radius: 0.375rem;
+}
+
+.language {
+    margin-right: 0.5rem;
+}
+
+.copy-button {
+    background-color: #007bff; /* Button background color */
+    color: #fff; /* Button text color */
+    border: 2px solid #1A1919; /* Use your preferred color code */
+    border-radius: 10px; /* Optional, adds rounded corners */
+    padding: 0.25rem 0.5rem;
+    cursor: pointer;
+}
+
+.code {
+    padding: 1rem;
+    font-family: 'Courier New', monospace;
+    white-space: pre;
+}
+</style>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <a class="navbar-brand" href="">Welcome to my NGINX service!</a>
+        </nav>
+    </header>
+
+    <main>
+        <div class="container">
+            <h1>NGINX links Documentation</h1>
+
+            <!-- Link to GitHub Repository -->
+            <p><a href="https://github.com/Nerogen/DevUpScripts" class="btn btn-primary btn-large">View On GitHub</a></p>
+
+            <!-- Usage Information -->
+            <h2>Links Usage</h2>
+            <p>Here's how to use this Links:</p>
+            <ul><li>Click to hyperlink and retrieve next page: <a href="/nextpage" target="_blank">/nextpage</a></li>
+                <li>Click to hyperlink and auto download music file: <a href="/music" target="_blank">/music</a></li>
+                <li>Click to hyperlink and retrieve info about php from apache server: <a href="/info.php" target="_blank">/info.php</a></li>
+                <li>Click to hyperlink and retrieve info about other server: <a href="/secondserver" target="_blank">/secondserver</a></li>
+                <li>Click to hyperlink and retrieve red or blue page: <a href="/redblue" target="_blank">/redblue</a></li>
+                <li>Click to hyperlink and retrieve png image: <a href="/1.png" target="_blank">/1.png</a></li>
+                <li>Click to hyperlink and retrieve jpg image: <a href="/1.jpg" target="_blank">/1.jpg</a></li>
+
+                <!-- Add more instructions for your specific API endpoints -->
+            </ul>
+            <h2>Example of a request in curl</h2>
+
+            <div class="code-container">
+        <div class="header">
+            <span class="language">bash</span>
+            <button id="copyButton" class="copy-button">
+                Copy code
+            </button>
+        </div>
+
+        <div class="code-container">
+<pre><code class="python" id="codeToCopy">curl http://localhost/nextpage \
+&& curl http://localhost/music \
+&& curl http://localhost/info.php \
+&& curl http://localhost/secondserver \
+&& curl http://localhost/redblue \
+&& curl http://localhost/1.png \
+&& curl http://localhost/1.jpg</code></pre>
+        </div>
+    <script>
+        hljs.highlightAll(); // Apply syntax highlighting to all code blocks
+    </script>
+<script>
+       // Get a reference to the copy button and the code element
+const copyButton = document.getElementById('copyButton');
+const codeToCopy = document.getElementById('codeToCopy');
+
+// Add a click event listener to the copy button
+copyButton.addEventListener('click', function () {
+    // Create a range and select the text within the code element
+    const range = document.createRange();
+    range.selectNode(codeToCopy);
+    window.getSelection().removeAllRanges();
+    window.getSelection().addRange(range);
+
+    // Copy the selected text to the clipboard
+    document.execCommand('copy');
+
+    // Deselect the text
+    window.getSelection().removeAllRanges();
+
+    // Notify the user that the code has been copied
+    alert('Code has been copied to the clipboard');
+});
+    </script>
+    </div>
+            <h2>Examples of Responses</h2>
+            <p>Sample responses from NGINX:</p>
+            <div class="code-container">
+            <pre><code class="python">/nextpage This is next page of nginx!</code></pre>
+            </div>
+            <div class="code-container">
+            <pre><code class="python">/music download file music.mp3 to your machine</code></pre>
+            </div>
+            <div class="code-container">
+            <pre><code class="python">/info.php show info from apache server</code></pre>
+            </div>
+            <div class="code-container">
+            <pre><code class="python">/nextserver get with revers proxy page from python.org</code></pre>
+            </div>
+            <div class="code-container">
+            <pre><code class="python">/redblue get blue or red page from nginx servers</code></pre>
+            </div>
+            <div class="code-container">
+            <pre><code class="python">/1.png get png image from nginx server</code></pre>
+            </div>
+            <div class="code-container">
+            <pre><code class="python">/1.jpg get jpg image from nginx server</code></pre>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2023 My NGINX Documentation. All rights reserved.</p>
+        </div>
+    </footer>
+
+</body>
+</html>
