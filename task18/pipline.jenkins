@@ -1,0 +1,27 @@
+pipeline {
+    agent any
+
+    stages {
+
+        stage('Docker version') {
+            agent {
+                label 'ubuntu'
+            }
+            steps {
+                sh "echo $USER"
+                sh 'sudo chmod 777 /var/run/docker.sock'
+                sh 'docker version'
+            }
+        }
+
+        stage('Docker version master') {
+            agent {
+                label 'master'
+            }
+            steps {
+                sh "echo $USER"
+                sh 'docker version'
+            }
+        }
+    }
+}

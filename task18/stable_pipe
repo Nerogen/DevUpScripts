@@ -1,0 +1,93 @@
+pipeline {
+    agent any
+
+    stages {
+
+        stage('Docker version rebuil') {
+            agent {
+                label 'ubuntu'
+            }
+            steps {
+                sh "echo $USER"
+                sh 'sudo chmod 777 /var/run/docker.sock'
+                sh 'docker version'
+            }
+        }
+
+        stage('Docker version master') {
+            agent {
+                label 'master'
+            }
+            steps {
+                sh "echo $USER"
+                sh 'docker version'
+            }
+        }
+
+        stage('Build docker image') {
+            steps {
+                sh 'docker-compose build'
+            }
+        }
+
+        stage('Push docker image to DockerHub') {
+            steps{
+                withDockerRegistry(credentialsId: 'docker-hub-cred', url: 'https://index.docker.io/v1/') {
+                    sh '''
+                        docker push danwhite123/nginx-image:latest && docker push danwhite123/apache-image:latest
+                    '''
+                }
+            }
+        }
+
+        stage('Delete docker image locally') {
+            steps{
+                sh 'docker rmi -f danwhite123/nginx-image:latest && docker rmi -f danwhite123/apache-image:latest'
+            }
+        }
+
+
+        stage('Delete all images, networks and containers if exists'){
+            agent {
+                    label 'ubuntu'
+            }
+            steps {
+                script {
+                    // Stop and remove all running containers
+                    sh 'docker rm -f $(docker ps -aq) || true'
+
+                    // Delete all networks (excluding built-in networks)
+                    sh 'docker network ls --format "{{.Name}}" | grep -vE "^(bridge|host|none)$" | xargs -r docker network rm'
+
+                    // Try to force-remove all images
+                    sh 'docker images -q | xargs -r docker rmi -f'
+                }
+            }
+        }
+
+        stage('Creating network for containers') {
+            agent {
+                label 'ubuntu'
+            }
+            steps {
+                sh 'docker network create my_network'
+            }
+        }
+
+        stage('Run docker container apache') {
+            agent {
+                label 'ubuntu'
+            }
+            steps {
+                sh 'docker run -d -p 8080:80 --name apache --network=my_network danwhite123/apache-image:latest'
+            }
+        }
+
+        stage('Run docker container nginx') {
+            agent {
+                label 'ubuntu'
+            }
+            steps {
+                sh 'docker run -d -p 80:80 --name nginx --network=my_network danwhite123/nginx-image:latest'
+            }
+        }
