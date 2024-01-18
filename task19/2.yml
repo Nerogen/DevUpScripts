@@ -1,0 +1,18 @@
+version: 0.2
+phases:
+  pre_build:
+    commands:
+      - echo Logging ...
+      - docker login -u $DOCKERHUB_USERNAME -p $DOCKERHUB_PASSWORD
+
+  build:
+    commands:
+      - echo Building the image...
+      - docker build -t danwhite123/nginx-image:latest -f Dockerfile_nginx .
+  post_build:
+    commands:
+      - echo Pushing the image...
+      - docker push danwhite123/nginx-image:latest
+artifacts:
+    files:
+        - imagedefinitions.json

@@ -1,0 +1,14 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      python: 3.8
+
+  build:
+    commands:  # E229UBUXBQ309W front id
+      - aws cloudfront create-invalidation --distribution-id "E229UBUXBQ309W" --paths "/*"
+
+artifacts:
+  files: "**/*"
+  exclude_buildspec: true
