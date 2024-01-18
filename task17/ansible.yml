@@ -37,8 +37,8 @@
             - docker-ce-cli
             - containerd.io
             - docker-buildx-plugin
-            - docker-compose-plugin
-            - docker-compose
+            - docker-compose.yml-plugin
+            - docker-compose.yml
             - git
           state: latest
           update_cache: true
@@ -74,7 +74,7 @@
 
       - name: Install Docker Compose from GitHub
         shell:
-          cmd: "curl -L https://github.com/docker/compose/releases/latest/download/docker-compose-Linux-x86_64 -o /usr/local/bin/docker-compose && chmod +x /usr/local/bin/docker-compose"
+          cmd: "curl -L https://github.com/docker/compose/releases/latest/download/docker-compose.yml-Linux-x86_64 -o /usr/local/bin/docker-compose.yml && chmod +x /usr/local/bin/docker-compose.yml"
         args:
           executable: /bin/bash
 
@@ -96,6 +96,6 @@
         dest: ./dg/
         version: master  # Specify the branch or tag you want to clone (optional)
 
-    - name: Run docker-compose up
+    - name: Run docker-compose.yml up
       ansible.builtin.shell:
-        cmd: cd dg/ && docker-compose up --build -d
+        cmd: cd dg/ && docker-compose.yml up --build -d

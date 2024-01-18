@@ -34,7 +34,7 @@
         apt:
           name:
             - docker-ce
-            - docker-compose
+            - docker-compose.yml
           state: latest
           update_cache: true
       when: ansible_os_family == "Debian"
@@ -89,6 +89,6 @@
         dest: ./dg/
         version: master  # Specify the branch or tag you want to clone (optional)
 
-    - name: Run docker-compose up
+    - name: Run docker-compose.yml up
       ansible.builtin.shell:
-        cmd: cd dg/ && docker-compose up -d
+        cmd: cd dg/ && docker-compose.yml up -d

@@ -26,7 +26,7 @@
     apt:
       name:
         - docker-ce
-        - docker-compose
+        - docker-compose.yml
       state: latest
       update_cache: true
   when: ansible_os_family == "Debian"
@@ -70,7 +70,7 @@
 
   - name: Install Docker Compose from GitHub
     shell:
-      cmd: "curl -L https://github.com/docker/compose/releases/latest/download/docker-compose-Linux-x86_64 -o /usr/local/bin/docker-compose && chmod +x /usr/local/bin/docker-compose"
+      cmd: "curl -L https://github.com/docker/compose/releases/latest/download/docker-compose.yml-Linux-x86_64 -o /usr/local/bin/docker-compose.yml && chmod +x /usr/local/bin/docker-compose.yml"
     args:
       executable: /bin/bash
   when: ansible_os_family == "RedHat"
