@@ -14,7 +14,7 @@ receivers:
   - name: 'slack'
 
     slack_configs:
-      - api_url: https://hooks.slack.com/services/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
+      - api_url: #some url
         channel: #a-project
         send_resolved: false
         text: "{{ .CommonAnnotations.description }}"
