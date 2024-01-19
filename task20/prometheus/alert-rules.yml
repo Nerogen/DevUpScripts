@@ -2,8 +2,8 @@ groups:
   - name: example
     rules:
       - alert: HighCpuUsage
-        expr: 100 - (avg(irate(node_cpu_seconds_total{mode="idle"}[1m])) * 100)
-        for: 1m
+        expr: 100 - (avg(irate(node_cpu_seconds_total{mode="idle"}[10s])) * 100)
+        for: 10s
         labels:
           severity: warning
         annotations:
