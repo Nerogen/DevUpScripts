@@ -2,7 +2,7 @@ version: '3'
 
 services:
   prometheus:
-    image: prom/prometheus
+    image: prom/prometheus:v2.49.1
     volumes:
       - ./prometheus:/etc/prometheus
     command:
@@ -11,23 +11,22 @@ services:
       - '9090:9090'
 
   node-exporter:
-    image: prom/node-exporter
+    image: prom/node-exporter:v1.7.0
     ports:
       - '9100:9100'
     volumes:
       - /proc:/host/proc:ro
       - /sys:/host/sys:ro
       - /:/rootfs:ro
-      - /etc/hostname:/etc/host_hostname:ro
     command:
       - '--path.procfs=/host/proc'
       - '--path.sysfs=/host/sys'
-      - '--collector.filesystem.ignored-mount-points'
-      - '^/(sys|proc|dev|host|etc)($$|/)'
+      - '--collector.filesystem.mount-points-exclude'
+      - '^/(sys|proc|dev|host|etc|rootfs/var/lib/docker/containers|rootfs/var/lib/docker/overlay2|rootfs/run/docker/netns|rootfs/var/lib/docker/aufs)($$|/)'
 
 
   alertmanager:
-    image: prom/alertmanager
+    image: prom/alertmanager:v0.26.0
     volumes:
       - ./alertmanager:/etc/alertmanager
     command:
@@ -36,6 +35,6 @@ services:
       - '9093:9093'
 
   grafana:
-    image: grafana/grafana
+    image: grafana/grafana:9.5.15
     ports:
       - '3000:3000'

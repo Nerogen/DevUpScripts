@@ -1,11 +1,15 @@
 groups:
-  - name: example
+  - name: HighCpuAlert
     rules:
       - alert: HighCpuUsage
-        expr: 100 * (1 - (irate(node_cpu_seconds_total{mode="idle", job="node-exporter-some"}[1m]))) < 80
-        for: 10s
+        expr: 100 * (1 - (irate(node_cpu_seconds_total{cpu="0", mode="idle", job="node-exporter-some"}[20s]))) < 80
+        for: 5s
         labels:
           severity: warning
         annotations:
-          description: The average CPU load is {{ humanize $value }}% on instance {{ $labels.instance }}
+          description: |
+            High CPU Load Alert:
+            - Instance: {{ $labels.instance }}
+            - Average CPU Load: {{ humanize $value }}%
+            - Time Window: 5 seconds
           summary: High CPU Load

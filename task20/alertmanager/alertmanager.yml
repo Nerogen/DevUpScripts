@@ -1,21 +1,24 @@
 global:
-  resolve_timeout: 1m
+  resolve_timeout: 1s
 
 route:
   group_by:
     - aproject
-  group_wait: 10s
-  group_interval: 10s
+  group_wait: 1s
+  group_interval: 1s
   repeat_interval: 1h
-  receiver: 'slack'
+  receiver: AlertTrigger
 
 
 receivers:
-  - name: 'slack'
-
+  - name: AlertTrigger
     slack_configs:
-      - api_url: #some url
+      - api_url:
         channel: #a-project
         send_resolved: false
         text: "{{ .CommonAnnotations.description }}"
+
+    telegram_configs:
+      - bot_token:
+        chat_id:
 
