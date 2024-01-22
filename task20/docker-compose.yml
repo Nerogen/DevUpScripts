@@ -1,10 +1,15 @@
 version: '3'
 
+volumes:
+    prometheus_data: {}
+    grafana_data: {}
+
 services:
   prometheus:
     image: prom/prometheus:v2.49.1
     volumes:
       - ./prometheus:/etc/prometheus
+      - prometheus_data:/prometheus
     command:
       - '--config.file=/etc/prometheus/prometheus.yml'
     ports:
@@ -21,9 +26,6 @@ services:
     command:
       - '--path.procfs=/host/proc'
       - '--path.sysfs=/host/sys'
-      - '--collector.filesystem.mount-points-exclude'
-      - '^/(sys|proc|dev|host|etc|rootfs/var/lib/docker/containers|rootfs/var/lib/docker/overlay2|rootfs/run/docker/netns|rootfs/var/lib/docker/aufs)($$|/)'
-
 
   alertmanager:
     image: prom/alertmanager:v0.26.0
@@ -38,3 +40,9 @@ services:
     image: grafana/grafana:9.5.15
     ports:
       - '3000:3000'
+    volumes:
+      - grafana_data:/var/lib/grafana
+    environment:
+      - GF_SECURITY_ADMIN_USER=${ADMIN_USER:-admin}
+      - GF_SECURITY_ADMIN_PASSWORD=${ADMIN_PASSWORD:-admin}
+      - GF_USERS_ALLOW_SIGN_UP=false

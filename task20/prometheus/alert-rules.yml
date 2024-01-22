@@ -2,8 +2,8 @@ groups:
   - name: HighCpuAlert
     rules:
       - alert: HighCpuUsage
-        expr: 100 * (1 - (irate(node_cpu_seconds_total{cpu="0", mode="idle", job="node-exporter-some"}[20s]))) < 80
-        for: 5s
+        expr: 100 * (1 - (irate(node_cpu_seconds_total{cpu="0", mode="idle", job="node-exporter-some"}[9s]))) > 80
+        for: 10s
         labels:
           severity: warning
         annotations:
@@ -11,5 +11,5 @@ groups:
             High CPU Load Alert:
             - Instance: {{ $labels.instance }}
             - Average CPU Load: {{ humanize $value }}%
-            - Time Window: 5 seconds
+            - Time Window: 10 seconds
           summary: High CPU Load
