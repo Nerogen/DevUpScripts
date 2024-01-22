@@ -1,0 +1,28 @@
+groups:
+  - name: HighCpuAlert
+    rules:
+      - alert: HighCpuUsage
+        expr: 100 * (1 - (irate(node_cpu_seconds_total{cpu="0", mode="idle", job="CPU"}[9s]))) > 80
+        for: 10s
+        labels:
+          severity: warning
+        annotations:
+          description: |
+            High CPU Load Alert:
+            - Instance: {{ $labels.instance }}
+            - Average CPU Load: {{ humanize $value }}%
+            - Time Window: 10 seconds
+          summary: High CPU Load
+
+      - alert: HighMemoryUsage
+        expr: (100 * ((node_memory_MemTotal_bytes{metric="memory"} - node_memory_MemFree_bytes{metric="memory"} - node_memory_Buffers_bytes{metric="memory"} - node_memory_Cached_bytes{metric="memory"} - node_memory_SReclaimable_bytes{metric="memory"}) / node_memory_MemTotal_bytes{metric="memory"})) > 60
+        for: 10s
+        labels:
+          severity: warning
+        annotations:
+          description: |
+            High Memory Usage Alert:
+            - Instance: {{ $labels.instance }}
+            - Available Memory: {{ humanize $value }}
+            - Time Window: 10 minutes
+          summary: High Memory Usage
