@@ -1,0 +1,32 @@
+version: '3'
+services:
+  nginx:
+    image: nginx:1.25.3
+    ports:
+      - "80:80"
+    labels:
+      logging: "promtail"
+      logging_jobname: "containerlogs"
+
+  promtail:
+    image: grafana/promtail:main-de251c3
+    volumes:
+      - ./promtail:/etc/promtail
+      - /var/lib/docker/containers:/var/lib/docker/containers:ro
+      - /var/run/docker.sock:/var/run/docker.sock
+    command: -config.file=/etc/promtail/promtail-config.yml
+
+  grafana:
+    image: grafana/grafana:9.5.15
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+      - GF_SECURITY_ADMIN_USER=admin
+
+  loki:
+    image: grafana/loki:main-de251c3
+    ports:
+      - "3100:3100"
+    command: -config.file=/etc/loki/local-config.yaml
+

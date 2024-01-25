@@ -1,5 +1,5 @@
 global:
-  resolve_timeout: 3s
+  resolve_timeout: 1s
 
 route:
   group_by:
@@ -15,11 +15,11 @@ receivers:
     slack_configs:
       - api_url:
         channel: #a-project
-        send_resolved: false
+        send_resolved: true
         text: "{{ .CommonAnnotations.description }}"
 
     telegram_configs:
       - bot_token: ""
-        send_resolved: false
+        send_resolved: true
         chat_id: -
 

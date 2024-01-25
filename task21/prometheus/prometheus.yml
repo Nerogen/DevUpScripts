@@ -24,16 +24,18 @@ scrape_configs:
 
   - job_name: 'node-exporter-cpu'
     static_configs:
-      - targets: [ 'node-exporter:9100' ]
+      - targets: [ 'ip:9100' ]
         labels:
           job: СPU
           metric: cpu
+          host: ip <--
 
   - job_name: 'node-exporter-memory'
     static_configs:
-      - targets: [ '23.21.8.65:9100' ]
+      - targets: [ 'ip:9100' ]
         labels:
           job: VM
           metric: memory
+          host: ip <--
 
 
