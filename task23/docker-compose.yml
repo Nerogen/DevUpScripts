@@ -1,0 +1,70 @@
+version: '3'
+
+
+volumes:
+    prometheus_data: {}
+    grafana_data: {}
+
+
+services:
+
+  nginx_container:
+    container_name: nginx
+    build:
+      context: .
+      dockerfile: Dockerfile_nginx
+    ports:
+      - "80:80"
+    labels:
+      logging: "promtail"
+      logging_jobname: "containerlogs"
+
+
+  apache_container:
+    container_name: apache
+    build:
+      context: .
+      dockerfile: Dockerfile_apache
+    ports:
+      - "8080:80"
+    labels:
+      logging: "promtail"
+      logging_jobname: "containerlogs"
+
+
+  promtail:
+    image: grafana/promtail:main-de251c3
+    volumes:
+      - ./promtail:/etc/promtail
+      - /var/lib/docker/containers:/var/lib/docker/containers:ro
+      - /var/run/docker.sock:/var/run/docker.sock
+    command: -config.file=/etc/promtail/promtail-config.yml
+
+
+  grafana:
+    image: grafana/grafana:9.5.15
+    ports:
+      - '3000:3000'
+    volumes:
+      - grafana_data:/var/lib/grafana
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+      - GF_SECURITY_ADMIN_USER=admin
+
+
+  loki:
+    image: grafana/loki:main-de251c3
+    ports:
+      - "3100:3100"
+    command: -config.file=/etc/loki/local-config.yaml
+
+
+  prometheus:
+    image: prom/prometheus:v2.49.1
+    volumes:
+      - ./prometheus:/etc/prometheus
+      - prometheus_data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+    ports:
+      - '9090:9090'
