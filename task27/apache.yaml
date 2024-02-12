@@ -16,9 +16,7 @@ spec:
     spec:
       containers:
       - name: apache
-        image: danwhite123/task14-apache_container
-        ports:
-        - containerPort: 80
+        image: danwhite123/apache-image
 
 ---
 

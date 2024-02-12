@@ -1,0 +1,14 @@
+grafana:
+
+persistence:
+  type: pvc
+  enabled: true
+  storageClassName: local-storage
+  accessModes:
+    - ReadWriteOnce
+  size: 1Gi
+  finalizers:
+    - kubernetes.io/pvc-protection
+  selectorLabels:
+    type: local
+    purpose: grafana
