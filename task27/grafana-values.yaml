@@ -1,5 +1,5 @@
 grafana:
-
+defaultDashboardsEnabled: true
 persistence:
   type: pvc
   enabled: true

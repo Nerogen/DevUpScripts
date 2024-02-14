@@ -1,16 +1,15 @@
+{{- if .Values.persistence.createPV }}
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: grafana-pv-volume
-  namespace: monitoring
-  labels:
-    type: local
-    purpose: grafana
+  name: {{ .Release.Name }}-pv
 spec:
-  storageClassName: local-storage
   capacity:
-    storage: 1Gi
+    storage: {{ .Values.persistence.size }}
   accessModes:
     - ReadWriteOnce
+  persistentVolumeReclaimPolicy: {{ .Values.persistence.reclaimPolicy }}
+  storageClassName: {{ .Values.persistence.storageClassName }}
   hostPath:
-    path: "/media/working/grafana-volume/grafana"
+    path: /mnt/pv7
+{{- end }}
