@@ -1,0 +1,15 @@
+apiVersion: eksctl.io/v1alpha5
+kind: ClusterConfig
+metadata:
+  name: my-aws-cluster
+  region: us-east-1
+
+
+managedNodeGroups:
+- name: worker-node
+  desiredCapacity: 1
+  instanceType: "t3.medium"
+
+- name: t3-small-node
+  desiredCapacity: 1
+  instanceType: "t3.small"
