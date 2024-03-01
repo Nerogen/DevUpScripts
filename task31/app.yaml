@@ -1,0 +1,35 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: my-app-new
+  annotations:
+    argocd-image-updater.argoproj.io/image-list: danwhite123/nginx-image:~v1.0
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  destination:
+    namespace: default
+    server: 'https://kubernetes.default.svc'
+  source:
+    path: chart
+    repoURL: 'https://github.com/Nerogen/chart_nginx_argocd.git'
+    targetRevision: master
+    helm:
+      parameters:
+        - name: "replicaCount"
+          value: "1"
+        - name: "image.repository"
+          value: danwhite123/nginx-image
+        - name: "image.tag"
+          value: v1.0.0
+  project: default
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+      allowEmpty: false
+    syncOptions:
+      - Validate=true
+      - CreateNamespace=false
+      - PrunePropagationPolicy=foreground
+      - PruneLast=true
